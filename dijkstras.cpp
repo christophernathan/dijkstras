@@ -4,9 +4,18 @@
 #include <vector>
 using namespace std;
 
-int dijkstras(int s, int* dist, vector<int> adj[]){
+typedef pair<int,int> Pair;
 
-    priority_queue<int, int> q;
+int dijkstras(int s, int* dist, int adj[10][10]){
+
+    priority_queue<Pair, vector<Pair>, greater<Pair> > pq;
+
+    pq.push(make_pair(0,s));
+
+    while (pq.size()!=0){
+        int u = pq.top().second;
+    }
+
     
 }
 
@@ -34,5 +43,7 @@ int main(){
     }
     int s = 0; dist[0] = 0;
     int t = 9;
+
+    dijkstras(s,dist,adj);
 
 }
