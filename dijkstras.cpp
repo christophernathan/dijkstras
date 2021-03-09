@@ -4,17 +4,25 @@
 #include <vector>
 #include <utility>
 #include <stdlib.h>
+#include <ctime>
 using namespace std;
 
-const int N=10;
+const int N=100;
+
+bool edgeExists(vector<pair<int,int> > v, int neighbor){
+    for (int a=0;a<v.size();a++){
+        if (v[a].second == neighbor){ return true; }
+    }
+    return false;
+}
 
 void createGraph(vector<pair<int,int> > adj[N]){
     for (int i=0;i<N;i++){
         vector<pair<int,int> > v;
-        int numEdges = rand()%N;
+        int numEdges = rand()%10;
         for (int a=0;a<numEdges;a++){
             int neighbor = rand()%N;
-            if (neighbor!=i){
+            if (neighbor!=i && !edgeExists(v,neighbor)){
                 int weight = rand()%100 + 1;
                 v.push_back(make_pair(weight,neighbor));
             }
@@ -51,6 +59,7 @@ void dijkstras(int s, int* dist, int* prev, vector<pair<int,int> > adj[N]){
 }
 
 int main(){
+    srand(time(NULL));
 
     vector<pair<int,int> > adj[N];
 
