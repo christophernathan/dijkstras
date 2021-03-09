@@ -3,9 +3,25 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <stdlib.h>
 using namespace std;
 
-const int N=100;
+const int N=10;
+
+void createGraph(vector<pair<int,int> > adj[N]){
+    for (int i=0;i<N;i++){
+        vector<pair<int,int> > v;
+        int numEdges = rand()%N;
+        for (int a=0;a<numEdges;a++){
+            int neighbor = rand()%N;
+            if (neighbor!=i){
+                int weight = rand()%100 + 1;
+                v.push_back(make_pair(weight,neighbor));
+            }
+        }
+        adj[i]=v;
+    }
+}
 
 void dijkstras(int s, int* dist, int* prev, vector<pair<int,int> > adj[N]){
 
@@ -38,11 +54,13 @@ int main(){
 
     vector<pair<int,int> > adj[N];
 
-    for (int i=0;i<N;i++){
+ /*   for (int i=0;i<N;i++){
         vector<pair<int,int> > v;
         v.push_back(make_pair(i+1,(i+1)%N));
         adj[i] = v;
-    }
+    }*/
+
+    createGraph(adj);
 
     for (int a=0;a<N;a++){
         cout << a << ": ";
