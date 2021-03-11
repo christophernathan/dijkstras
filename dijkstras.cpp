@@ -8,22 +8,23 @@
 using namespace std;
 
 const int N=100;
+const int MAX_EDGES_PER_NODE=10;
+const int MAX_WEIGHT_PER_NODE=100;
 
 bool edgeExists(vector<pair<int,int> > v, int neighbor){
     for (int a=0;a<v.size();a++){
         if (v[a].second == neighbor){ return true; }
-    }
-    return false;
+    } return false;
 }
 
 void createGraph(vector<pair<int,int> > adj[N]){
     for (int i=0;i<N;i++){
         vector<pair<int,int> > v;
-        int numEdges = rand()%10;
+        int numEdges = rand()%MAX_EDGES_PER_NODE;
         for (int a=0;a<numEdges;a++){
             int neighbor = rand()%N;
             if (neighbor!=i && !edgeExists(v,neighbor)){
-                int weight = rand()%100 + 1;
+                int weight = rand()%MAX_WEIGHT_PER_NODE + 1;
                 v.push_back(make_pair(weight,neighbor));
             }
         }
@@ -62,13 +63,6 @@ int main(){
     srand(time(NULL));
 
     vector<pair<int,int> > adj[N];
-
- /*   for (int i=0;i<N;i++){
-        vector<pair<int,int> > v;
-        v.push_back(make_pair(i+1,(i+1)%N));
-        adj[i] = v;
-    }*/
-
     createGraph(adj);
 
     for (int a=0;a<N;a++){
@@ -85,9 +79,9 @@ int main(){
         prev[i] = -1;
     }
 
-    int s = 0;
+    int startingNode = 0;
 
-    dijkstras(s,dist,prev,adj);
+    dijkstras(startingNode,dist,prev,adj);
 
     for (int i=0;i<N;i++){
         cout << dist[i] << endl;
