@@ -11,6 +11,18 @@ const int N=100;
 const int MAX_EDGES_PER_NODE=10;
 const int MAX_WEIGHT_PER_NODE=100;
 
+void printGraph(vector<pair<int,int> > adj[N], bool weighted){
+    for (int i=0;i<N;i++){
+        cout << i << ": ";
+        if (adj[i].size()!=0){
+            for (int a=0;a<adj[i].size()-1;a++){
+                weighted ? cout << "(" << adj[i][a].first << "," << adj[i][a].second << "), " : cout << adj[i][a].second << ", ";
+            } weighted ? cout << "(" << adj[i].back().first << "," << adj[i].back().second << ")" << endl : cout << adj[i].back().second << endl;
+        }
+    }
+    cout << endl;
+}
+
 bool edgeExists(vector<pair<int,int> > v, int neighbor){
     for (int a=0;a<v.size();a++){
         if (v[a].second == neighbor){ return true; }
@@ -29,6 +41,31 @@ void createGraph(vector<pair<int,int> > adj[N]){
             }
         }
         adj[i]=v;
+    }
+}
+
+void bfs(int s, int* dist, int* prev, vector<pair<int,int> > adj[N]){
+    queue<int> q;
+    int done[N];
+    for (int i=0;i<N;i++){ done[i] = 0; }
+
+    dist[s]=0;
+    q.push(s);
+
+    while (!q.empty()){
+        int u = q.front();
+        q.pop();
+        for (int i=0;i<adj[u].size();i++){
+            pair<int,int> v = adj[u][i];
+            if (!done[v.second]){
+                if (dist[u]+1 < dist[v.second]){
+                    dist[v.second] = dist[u]+1;
+                    prev[v.second] = u;
+                    q.push(v.second);
+                }
+            }
+        }
+        done[u] = 1;
     }
 }
 
@@ -59,32 +96,41 @@ void dijkstras(int s, int* dist, int* prev, vector<pair<int,int> > adj[N]){
     }
 }
 
-int main(){
-    srand(time(NULL));
-
+void executeBFS(int startingNode){
     vector<pair<int,int> > adj[N];
     createGraph(adj);
-
-    for (int a=0;a<N;a++){
-        cout << a << ": ";
-        for (int i=0;i<adj[a].size();i++){
-            cout << "(" << adj[a][i].first << "," << adj[a][i].second << ") ";
-        } cout << endl;
-    }
-
-    int dist[N];
-    int prev[N];
+    printGraph(adj,false);
+    int dist[N], prev[N];
     for (int i=0;i<N;i++){
         dist[i] = INT_MAX;
         prev[i] = -1;
     }
-
-    int startingNode = 0;
-
-    dijkstras(startingNode,dist,prev,adj);
-
+    bfs(startingNode,dist,prev,adj);
     for (int i=0;i<N;i++){
-        cout << dist[i] << endl;
+        cout << startingNode << " ---> " << i << ": " << dist[i] << endl;
     }
+}
+
+void executeDijkstras(int startingNode){
+    vector<pair<int,int> > adj[N];
+    createGraph(adj);
+    printGraph(adj, true);
+
+    int dist[N], prev[N];
+    for (int i=0;i<N;i++){
+        dist[i] = INT_MAX;
+        prev[i] = -1;
+    }
+    dijkstras(startingNode,dist,prev,adj);
+    for (int i=0;i<N;i++){
+        cout << startingNode << " ---> " << i << ": " << dist[i] << endl;
+    }
+}
+
+int main(){
+    srand(time(NULL));
+
+    executeDijkstras(0);
+    executeBFS(0);
 
 }
